@@ -9,5 +9,6 @@ This is a demo of using Generic OnOff client model to get/set the generic onoff 
 4. The Generic OnOff client will start to get and set the Generic OnOff state periodically.
 
 >Note:
+>
 >1. The netkey index and appkey index are fixed to 0x0000 in this demo.
 >2. When the client device is re-provisioned but the server device is not, the first several get/set messages will be treated as replay attacks, so better to re-provision both devices.

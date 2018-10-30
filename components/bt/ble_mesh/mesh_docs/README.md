@@ -1,4 +1,4 @@
-# Espressif BLE Mesh Framework
+# ESP BLE Mesh Framework
 
 ## Demos
 
@@ -8,16 +8,16 @@
 ## Examples
 
 * [BLE Mesh Node Example Code](../../../../examples/bluetooth/ble_mesh/ble_mesh_node)
-* [BLE_Mesh_Node_Example_Walkthrough](../../../../examples/bluetooth/ble_mesh/ble_mesh_node/tutorial/Ble_Mesh_Node_Example_Walkthrough.md) 
+* [BLE_Mesh_Node_Example_Walkthrough](../../../../examples/bluetooth/ble_mesh/ble_mesh_node/tutorial/Ble_Mesh_Node_Example_Walkthrough.md)
 * [BLE Mesh Provisioner Example Code](../../../../examples/bluetooth/ble_mesh/ble_mesh_provisioner)
 * [BLE_Mesh_Provisioner_Example_Walkthrough](../../../../examples/bluetooth/ble_mesh/ble_mesh_provisioner/tutorial/Ble_Mesh_Provisioner_Example_Walkthrough.md)
 * [BLE Mesh Client Model Example Code](../../../../examples/bluetooth/ble_mesh/ble_mesh_client_model)
 
 ## Documentation
 
-### ESP32 BLE Mesh Development Documentation
+### ESP BLE Mesh Development Documentation
 
-* [Getting started with ESP32 BLE Mesh](BLE-Mesh_Getting_Started_EN.md)
+* [Getting started with ESP BLE Mesh](BLE-Mesh_Getting_Started_EN.md)
 * [FAQs](BLE-Mesh_FAQs_EN.md)
 * [Known Issues](BLE-Mesh_Known_Issues_EN.md)
 
@@ -35,4 +35,3 @@
 * [Provisioning a Bluetooth Mesh Network Part 1](http://blog.bluetooth.com/provisioning-a-bluetooth-mesh-network-part-1)
 * [Provisioning a Bluetooth Mesh Network Part 2](http://blog.bluetooth.com/provisioning-a-bluetooth-mesh-network-part-2)
 
-## Announcements
