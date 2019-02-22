@@ -1227,4 +1227,6 @@ menu Bluetooth
         default 0xdb5c if BT_ENABLED
         default 0
 
+        source "$IDF_PATH/components/nimble/Kconfig.in"
+
 endmenu
