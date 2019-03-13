@@ -33,14 +33,14 @@ print_bytes(const uint8_t *bytes, int len)
     int i;
 
     for (i = 0; i < len; i++) {
-        MODLOG_DFLT(INFO, "%s0x%02x", i != 0 ? ":" : "", bytes[i]);
+        MODLOG_DFLT(DEBUG, "%s0x%02x", i != 0 ? ":" : "", bytes[i]);
     }
 }
 
 void
 print_mbuf(const struct os_mbuf *om)
 {
-    int colon;
+    int colon, i;
 
     colon = 0;
     while (om != NULL) {
@@ -49,7 +49,9 @@ print_mbuf(const struct os_mbuf *om)
         } else {
             colon = 1;
         }
-        print_bytes(om->om_data, om->om_len);
+        for (i = 0; i < om->om_len; i++) {
+            MODLOG_DFLT(INFO, "%s0x%02x", i != 0 ? ":" : "", om->om_data[i]);
+        }
         om = SLIST_NEXT(om, om_next);
     }
 }
