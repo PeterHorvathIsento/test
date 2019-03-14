@@ -387,6 +387,8 @@ build_docs:
   image: $CI_DOCKER_REGISTRY/esp32-ci-env$BOT_DOCKER_IMAGE_TAG
   tags:
     - host_test
+  except:
+    - feature/nimble-preview
   dependencies: []
   before_script: *do_nothing_before_no_filter
 
@@ -406,6 +408,8 @@ verify_cmake_style:
   image: $CI_DOCKER_REGISTRY/esp32-ci-env$BOT_DOCKER_IMAGE_TAG
   tags:
     - host_test
+  except:
+    - feature/nimble-preview
   dependencies: []
   only:
     variables:
@@ -808,7 +812,9 @@ assign_test:
       - components/idf_test/*/TC.sqlite
       - $EXAMPLE_CONFIG_OUTPUT_PATH
     expire_in: 1 week
-  only:
+  except:
+    refs:
+      - feature/nimble-preview
     variables:
       - $BOT_TRIGGER_WITH_LABEL == null
       - $BOT_LABEL_UNIT_TEST
@@ -829,6 +835,8 @@ assign_test:
 .example_test_template: &example_test_template
   stage: target_test
   when: on_success
+  except:
+    - feature/nimble-preview
   only:
     refs:
       - master
@@ -888,6 +896,8 @@ assign_test:
     - assign_test
     - build_esp_idf_tests_make
     - build_esp_idf_tests_cmake
+  except:
+    - feature/nimble-preview
   only:
     refs:
       - master
@@ -908,6 +918,8 @@ assign_test:
 .test_template: &test_template
   stage: target_test
   when: on_success
+  except:
+    - feature/nimble-preview
   only:
     refs:
       - master
