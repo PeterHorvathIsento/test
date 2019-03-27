@@ -38,13 +38,14 @@ See the Getting Started Guide for full steps to configure and use ESP-IDF to bui
 ## Example Output
 
 This console output can be observed when blehr is connected to client and client enables notifications:
+
 ```
 I (91) BTDM_INIT: BT controller compile version [fe7ced0]
 I (91) system_api: Base MAC address is not set, read default base MAC address from BLK0 of EFUSE
 I (181) phy: phy_version: 4100, 6fa5e27, Jan 25 2019, 17:02:06, 0, 0
 I (421) NimBLE_BLE_HeartRate: BLE Host Task Started
 GAP procedure initiated: stop advertising.
-Device Address: 30:ae:a4:10:9c:42
+Device Address: xx:xx:xx:xx:xx:xx
 GAP procedure initiated: advertise; disc_mode=2 adv_channel_map=0 own_addr_type=0 adv_filter_policy=0 adv_itvl_min=0 adv_itvl_max=0
 connection established; status=0
 subscribe event; cur_notify=1

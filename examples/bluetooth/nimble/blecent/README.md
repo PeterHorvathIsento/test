@@ -57,7 +57,7 @@ I (422) phy: phy_version: 4007, 9c6b43b, Jan 11 2019, 16:45:07, 0, 2
 I (722) NimBLE_BLE_CENT: BLE Host Task Started
 GAP procedure initiated: stop advertising.
 GAP procedure initiated: discovery; own_addr_type=0 filter_policy=0 passive=1 limited=0 filter_duplicates=1 duration=forever
-GAP procedure initiated: connect; peer_addr_type=1 peer_addr=78:08:4c:90:d7:6b scan_itvl=16 scan_window=16 itvl_min=24 itvl_max=40 latency=0 supervision_timeout=256 min_ce_len=16 max_ce_len=768 own_addr_type=0
+GAP procedure initiated: connect; peer_addr_type=1 peer_addr=xx:xx:xx:xx:xx:xx scan_itvl=16 scan_window=16 itvl_min=24 itvl_max=40 latency=0 supervision_timeout=256 min_ce_len=16 max_ce_len=768 own_addr_type=0
 Connection established
 GATT procedure initiated: discover all services
 GATT procedure initiated: discover all characteristics; start_handle=1 end_handle=3
@@ -82,7 +82,7 @@ I (250) phy: phy_version: 4000, b6198fa, Sep  3 2018, 15:11:06, 0, 0
 I (480) NimBLE_BLE_CENT: BLE Host Task Started
 GAP procedure initiated: stop advertising.
 GAP procedure initiated: discovery; own_addr_type=0 filter_policy=0 passive=1 limited=0 filter_duplicates=1 duration=forever
-GAP procedure initiated: connect; peer_addr_type=1 peer_addr=6a:e9:55:a7:31:a1 scan_itvl=16 scan_window=16 itvl_min=24 itvl_max=40 latency=0 supervision_timeout=256 min_ce_len=16 max_ce_len=768 own_addr_type=0
+GAP procedure initiated: connect; peer_addr_type=1 peer_addr=xx:xx:xx:xx:xx:xx scan_itvl=16 scan_window=16 itvl_min=24 itvl_max=40 latency=0 supervision_timeout=256 min_ce_len=16 max_ce_len=768 own_addr_type=0
 Connection established
 GATT procedure initiated: discover all services
 GATT procedure initiated: discover all characteristics; start_handle=1 end_handle=3

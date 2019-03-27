@@ -241,6 +241,7 @@ bleprph_gap_event(struct ble_gap_event *event, void *arg)
     case BLE_GAP_EVENT_PASSKEY_ACTION:
         ESP_LOGI(tag, "PASSKEY_ACTION_EVENT started \n");
         struct ble_sm_io pkey = {0};
+        int key = 0;
 
         if (event->passkey.params.action == BLE_SM_IOACT_DISP) {
             pkey.action = event->passkey.params.action;
@@ -250,9 +251,14 @@ bleprph_gap_event(struct ble_gap_event *event, void *arg)
             ESP_LOGI(tag, "ble_sm_inject_io result: %d\n", rc);
         } else if (event->passkey.params.action == BLE_SM_IOACT_NUMCMP) {
             ESP_LOGI(tag, "Passkey on device's display: %d", event->passkey.params.numcmp);
-            ESP_LOGI(tag, "Accepting the passkey!");
+            ESP_LOGI(tag, "Accept or reject the passkey through console in this format -> key Y or key N");
             pkey.action = event->passkey.params.action;
-            pkey.numcmp_accept = 1;
+            if (scli_receive_key(&key)) {
+                pkey.numcmp_accept = key;
+            } else {
+                pkey.numcmp_accept = 0;
+                ESP_LOGE(tag, "Timeout! Rejecting the key");
+            }
             rc = ble_sm_inject_io(event->passkey.conn_handle, &pkey);
             ESP_LOGI(tag, "ble_sm_inject_io result: %d\n", rc);
         } else if (event->passkey.params.action == BLE_SM_IOACT_OOB) {
@@ -264,7 +270,6 @@ bleprph_gap_event(struct ble_gap_event *event, void *arg)
             rc = ble_sm_inject_io(event->passkey.conn_handle, &pkey);
             ESP_LOGI(tag, "ble_sm_inject_io result: %d\n", rc);
         } else if (event->passkey.params.action == BLE_SM_IOACT_INPUT) {
-            int key = 0;
             ESP_LOGI(tag, "Enter the passkey through console in this format-> key 123456");
             pkey.action = event->passkey.params.action;
             if (scli_receive_key(&key)) {
@@ -377,6 +382,8 @@ app_main(void)
     ble_store_ram_init();
 
     nimble_port_freertos_init(ble_host_task);
+
+    /* Initialize command line interface to accept input from user */
     rc = scli_init();
     if (rc != ESP_OK) {
         ESP_LOGE(tag, "scli_init() failed");

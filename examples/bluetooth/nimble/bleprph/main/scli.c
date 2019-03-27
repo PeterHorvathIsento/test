@@ -22,6 +22,8 @@
  *
  */
 #include <stdio.h>
+#include <ctype.h>
+#include "esp_log.h"
 #include <string.h>
 #include <esp_log.h>
 #include <esp_console.h>
@@ -39,13 +41,30 @@ static int stop;
 
 static int enter_passkey_handler(int argc, char *argv[])
 {
-
     int key;
+    char pkey[8];
+    int num;
+
     if (argc != 2) {
         return -1;
     }
-    sscanf(argv[1], "%d", &key);
-    xQueueSend(cli_handle, &key, 0);
+
+    sscanf(argv[1], "%s", pkey);
+    ESP_LOGI("You entered", "%s %s", argv[0], argv[1]);
+    num = pkey[0];
+
+    if (isalpha(num)) {
+        if ((strcasecmp(pkey, "Y") == 0) || (strcasecmp(pkey, "Yes") == 0)) {
+            key = 1;
+            xQueueSend(cli_handle, &key, 0);
+        } else {
+            key = 0;
+            xQueueSend(cli_handle, &key, 0);
+        }
+    } else {
+        sscanf(pkey, "%d", &key);
+        xQueueSend(cli_handle, &key, 0);
+    }
 
     return 0;
 }
@@ -129,7 +148,7 @@ static void scli_task(void *arg)
 
 int scli_init()
 {
-
+    /* Register CLI "key <value>" to accept input from user during pairing */
     ble_register_cli();
 
     xTaskCreate(scli_task, "scli_cli", 4096, (void *) 0, 3, &cli_task);
