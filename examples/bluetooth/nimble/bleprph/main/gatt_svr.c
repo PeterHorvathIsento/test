@@ -22,6 +22,8 @@
 #include <string.h>
 #include "host/ble_hs.h"
 #include "host/ble_uuid.h"
+#include "services/gap/ble_svc_gap.h"
+#include "services/gatt/ble_svc_gatt.h"
 #include "bleprph.h"
 
 /**
@@ -190,6 +192,9 @@ int
 gatt_svr_init(void)
 {
     int rc;
+
+    ble_svc_gap_init();
+    ble_svc_gatt_init();
 
     rc = ble_gatts_count_cfg(gatt_svr_svcs);
     if (rc != 0) {
