@@ -76,6 +76,14 @@ config NIMBLE_GAP_DEVICE_NAME_MAX_LEN
     help
         Device Name characteristic value shall be 0 to 248 octets in length.
 
+# Bonding NVS settings.
+config NIMBLE_NVS_PERSIST
+    bool "Persist the BLE Bonding keys in NVS"
+    depends on NIMBLE_ENABLED
+    default 0
+    help
+        Enable this flag to make bonding persistent across device reboots.
+
 # L2CAP settings.
 config NIMBLE_L2CAP_COC_MAX_NUM
     int "Maximum number of connection oriented channels"
