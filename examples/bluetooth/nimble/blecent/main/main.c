@@ -33,7 +33,7 @@ static const char *tag = "NimBLE_BLE_CENT";
 static int blecent_gap_event(struct ble_gap_event *event, void *arg);
 static uint8_t peer_addr[6];
 
-void ble_store_ram_init(void);
+void ble_store_config_init(void);
 
 /**
  * Application callback.  Called when the attempt to subscribe to notifications
@@ -546,7 +546,7 @@ app_main(void)
     assert(rc == 0);
 
     /* XXX Need to have template for store */
-    ble_store_ram_init();
+    ble_store_config_init();
 
     nimble_port_freertos_init(ble_host_task);
 

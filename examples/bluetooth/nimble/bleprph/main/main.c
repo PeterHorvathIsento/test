@@ -33,7 +33,7 @@ static const char *tag = "NimBLE_BLE_PRPH";
 static int bleprph_gap_event(struct ble_gap_event *event, void *arg);
 static uint8_t own_addr_type;
 
-void ble_store_ram_init(void);
+void ble_store_config_init(void);
 
 /**
  * Logs information about a connection to the console.
@@ -379,7 +379,7 @@ app_main(void)
     assert(rc == 0);
 
     /* XXX Need to have template for store */
-    ble_store_ram_init();
+    ble_store_config_init();
 
     nimble_port_freertos_init(ble_host_task);
 
