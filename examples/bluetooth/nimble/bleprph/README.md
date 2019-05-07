@@ -77,5 +77,3 @@ peer_ota_addr_type=1 peer_ota_addr=xx:xx:xx:xx:xx:xx peer_id_addr_type=1 peer_id
 
 ```
 
-## Note
-* NVS support is not yet integrated to bonding. So, for now, bonding is not persistent across reboot.

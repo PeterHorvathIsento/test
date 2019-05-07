@@ -16,6 +16,7 @@ COMPONENT_ADD_INCLUDEDIRS := nimble/nimble/include                     \
                              nimble/nimble/host/services/tps/include   \
                              nimble/nimble/host/util/include           \
                              nimble/nimble/host/store/ram/include      \
+                             nimble/nimble/host/store/config/include   \
                              nimble/nimble/host/mesh/include           \
                              nimble/ext/tinycrypt/include              \
                              esp-hci/include                           \
@@ -35,7 +36,10 @@ COMPONENT_SRCDIRS := nimble/nimble/host/src                            \
                      nimble/nimble/host/services/tps/src               \
                      nimble/nimble/host/util/src                       \
                      nimble/nimble/host/store/ram/src                  \
+                     nimble/nimble/host/store/config/src               \
                      esp-hci/src                                       \
+
+COMPONENT_OBJEXCLUDE := nimble/nimble/host/store/config/src/ble_store_config_conf.o
 
 ifeq ($(CONFIG_NIMBLE_MESH),y)
 COMPONENT_SRCDIRS += nimble/nimble/host/mesh/src

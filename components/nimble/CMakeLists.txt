@@ -14,6 +14,7 @@ if(CONFIG_NIMBLE_ENABLED)
             nimble/nimble/host/services/tps/include
             nimble/nimble/host/util/include
             nimble/nimble/host/store/ram/include
+            nimble/nimble/host/store/config/include
             nimble/porting/npl/freertos/include
             nimble/ext/tinycrypt/include
             esp-hci/include)
@@ -87,6 +88,8 @@ if(CONFIG_NIMBLE_ENABLED)
             "./nimble/nimble/host/src/ble_hs_hci.c"
             "./nimble/nimble/host/src/ble_hs_hci_util.c"
             "./nimble/nimble/host/store/ram/src/ble_store_ram.c"
+            "./nimble/nimble/host/store/config/src/ble_store_config.c"
+            "./nimble/nimble/host/store/config/src/ble_store_nvs.c"
             "./nimble/nimble/src/ble_util.c"
             "./nimble/porting/npl/freertos/src/nimble_port_freertos.c"
             "./nimble/porting/npl/freertos/src/npl_os_freertos.c"
@@ -134,6 +137,6 @@ if(CONFIG_NIMBLE_ENABLED)
 endif()
 
 # requirements can't depend on config
-set(COMPONENT_PRIV_REQUIRES bt)
+set(COMPONENT_PRIV_REQUIRES bt nvs_flash)
 
 register_component()
