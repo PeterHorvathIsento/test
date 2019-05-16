@@ -351,13 +351,22 @@ static int host_rcv_pkt(uint8_t *data, uint16_t len)
         totlen = BLE_HCI_EVENT_HDR_LEN + data[2];
         assert(totlen <= UINT8_MAX + BLE_HCI_EVENT_HDR_LEN);
 
-        evbuf = ble_hci_trans_buf_alloc(
-                    BLE_HCI_TRANS_BUF_EVT_HI);
-        assert(evbuf != NULL);
-
         if (data[1] == BLE_HCI_EVCODE_HW_ERROR) {
             assert(0);
         }
+
+        /* Allocate LE Advertising Report Event from lo pool only */
+        if ((data[1] == BLE_HCI_EVCODE_LE_META) && (data[3] == BLE_HCI_LE_SUBEV_ADV_RPT)) {
+            evbuf = ble_hci_trans_buf_alloc(BLE_HCI_TRANS_BUF_EVT_LO);
+            /* Skip advertising report if we're out of memory */
+            if (!evbuf) {
+                return 0;
+            }
+        } else {
+            evbuf = ble_hci_trans_buf_alloc(BLE_HCI_TRANS_BUF_EVT_HI);
+            assert(evbuf != NULL);
+        }
+
         memcpy(evbuf, &data[1], totlen);
 
         if (1 /*os_started()*/) {
