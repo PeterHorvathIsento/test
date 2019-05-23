@@ -2,7 +2,7 @@
 # Component Makefile
 #
 
-ifeq ($(CONFIG_NIMBLE_ENABLED),y)
+ifeq ($(CONFIG_BT_NIMBLE_ENABLED),y)
 COMPONENT_ADD_INCLUDEDIRS := nimble/nimble/include                     \
                              nimble/nimble/host/include                \
                              nimble/porting/nimble/include             \
@@ -41,7 +41,7 @@ COMPONENT_SRCDIRS := nimble/nimble/host/src                            \
 
 COMPONENT_OBJEXCLUDE := nimble/nimble/host/store/config/src/ble_store_config_conf.o
 
-ifeq ($(CONFIG_NIMBLE_MESH),y)
+ifeq ($(CONFIG_BT_NIMBLE_MESH),y)
 COMPONENT_SRCDIRS += nimble/nimble/host/mesh/src
 endif
 endif
