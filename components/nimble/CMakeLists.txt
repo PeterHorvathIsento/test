@@ -1,4 +1,4 @@
-if(CONFIG_NIMBLE_ENABLED)
+if(CONFIG_BT_NIMBLE_ENABLED)
 
     set(COMPONENT_ADD_INCLUDEDIRS
             nimble/porting/nimble/include
@@ -104,7 +104,7 @@ if(CONFIG_NIMBLE_ENABLED)
             "./nimble/porting/nimble/src/os_cputime.c"
             "./esp-hci/src/esp_nimble_hci.c")
 
-    if(CONFIG_NIMBLE_MESH)
+    if(CONFIG_BT_NIMBLE_MESH)
 
         list(APPEND COMPONENT_ADD_INCLUDEDIRS
             nimble/nimble/host/mesh/include)
