@@ -25,8 +25,6 @@ make menuconfig
 
 * Select 'Enable NimBLE host stack' under 'Component config > Bluetooth'.
 
-* If required, enable secure connection 4.2 from 'Component config > Bluetooth > Enable NimBLE host stack'.
-
 * Select I/O capabilities of device from 'Example Configuration > I/O Capability', default is 'Just_works'.
 
 * Enable/Disable other security related parameters 'Bonding, MITM option, secure connection(SM SC)' from 'Example Configuration'.
