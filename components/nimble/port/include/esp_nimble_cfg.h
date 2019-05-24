@@ -860,7 +860,7 @@
 #endif
 
 #ifndef MYNEWT_VAL_BLE_SM_BONDING
-#define MYNEWT_VAL_BLE_SM_BONDING (0)
+#define MYNEWT_VAL_BLE_SM_BONDING (1)
 #endif
 
 #ifndef MYNEWT_VAL_BLE_SM_IO_CAP
