@@ -22,20 +22,17 @@
 #include <assert.h>
 #include "sysinit/sysinit.h"
 #include "nimble/hci_common.h"
+#include "host/ble_hs.h"
+#include "nimble/nimble_port.h"
+#include "nimble/nimble_port_freertos.h"
 #include "esp_nimble_hci.h"
 #include "esp_bt.h"
 
 static ble_hci_trans_rx_cmd_fn *ble_hci_rx_cmd_hs_cb;
 static void *ble_hci_rx_cmd_hs_arg;
 
-static ble_hci_trans_rx_cmd_fn *ble_hci_rx_cmd_ll_cb;
-static void *ble_hci_rx_cmd_ll_arg;
-
 static ble_hci_trans_rx_acl_fn *ble_hci_rx_acl_hs_cb;
 static void *ble_hci_rx_acl_hs_arg;
-
-static ble_hci_trans_rx_acl_fn *ble_hci_rx_acl_ll_cb;
-static void *ble_hci_rx_acl_ll_arg;
 
 static struct os_mbuf_pool ble_hci_acl_mbuf_pool;
 static struct os_mempool_ext ble_hci_acl_pool;
@@ -69,8 +66,7 @@ static os_membuf_t ble_hci_evt_lo_buf[
                     MYNEWT_VAL(BLE_HCI_EVT_BUF_SIZE))
 ];
 
-void
-ble_hci_trans_cfg_hs(ble_hci_trans_rx_cmd_fn *cmd_cb,
+void ble_hci_trans_cfg_hs(ble_hci_trans_rx_cmd_fn *cmd_cb,
                      void *cmd_arg,
                      ble_hci_trans_rx_acl_fn *acl_cb,
                      void *acl_arg)
@@ -81,20 +77,8 @@ ble_hci_trans_cfg_hs(ble_hci_trans_rx_cmd_fn *cmd_cb,
     ble_hci_rx_acl_hs_arg = acl_arg;
 }
 
-void
-ble_hci_trans_cfg_ll(ble_hci_trans_rx_cmd_fn *cmd_cb,
-                     void *cmd_arg,
-                     ble_hci_trans_rx_acl_fn *acl_cb,
-                     void *acl_arg)
-{
-    ble_hci_rx_cmd_ll_cb = cmd_cb;
-    ble_hci_rx_cmd_ll_arg = cmd_arg;
-    ble_hci_rx_acl_ll_cb = acl_cb;
-    ble_hci_rx_acl_ll_arg = acl_arg;
-}
 
-int
-ble_hci_trans_hs_cmd_tx(uint8_t *cmd)
+int ble_hci_trans_hs_cmd_tx(uint8_t *cmd)
 {
     uint16_t len;
 
@@ -109,19 +93,17 @@ ble_hci_trans_hs_cmd_tx(uint8_t *cmd)
     return 0;
 }
 
-int
-ble_hci_trans_ll_evt_tx(uint8_t *hci_ev)
+int ble_hci_trans_ll_evt_tx(uint8_t *hci_ev)
 {
-    int rc;
+    int rc = ESP_FAIL;
 
-    assert(ble_hci_rx_cmd_hs_cb != NULL);
-
-    rc = ble_hci_rx_cmd_hs_cb(hci_ev, ble_hci_rx_cmd_hs_arg);
+    if (ble_hci_rx_cmd_hs_cb) {
+        rc = ble_hci_rx_cmd_hs_cb(hci_ev, ble_hci_rx_cmd_hs_arg);
+    }
     return rc;
 }
 
-int
-ble_hci_trans_hs_acl_tx(struct os_mbuf *om)
+int ble_hci_trans_hs_acl_tx(struct os_mbuf *om)
 {
     uint16_t len = 0;
     uint8_t data[MYNEWT_VAL(BLE_ACL_BUF_SIZE) + 1];
@@ -147,19 +129,17 @@ ble_hci_trans_hs_acl_tx(struct os_mbuf *om)
     return 0;
 }
 
-int
-ble_hci_trans_ll_acl_tx(struct os_mbuf *om)
+int ble_hci_trans_ll_acl_tx(struct os_mbuf *om)
 {
-    int rc;
+    int rc = ESP_FAIL;
 
-    assert(ble_hci_rx_acl_hs_cb != NULL);
-
-    rc = ble_hci_rx_acl_hs_cb(om, ble_hci_rx_acl_hs_arg);
+    if (ble_hci_rx_acl_hs_cb) {
+        rc = ble_hci_rx_acl_hs_cb(om, ble_hci_rx_acl_hs_arg);
+    }
     return rc;
 }
 
-uint8_t *
-ble_hci_trans_buf_alloc(int type)
+uint8_t *ble_hci_trans_buf_alloc(int type)
 {
     uint8_t *buf;
 
@@ -190,8 +170,7 @@ ble_hci_trans_buf_alloc(int type)
     return buf;
 }
 
-void
-ble_hci_trans_buf_free(uint8_t *buf)
+void ble_hci_trans_buf_free(uint8_t *buf)
 {
     int rc;
     /* XXX: this may look a bit odd, but the controller uses the command
@@ -218,14 +197,12 @@ ble_hci_trans_buf_free(uint8_t *buf)
  * Unsupported; the RAM transport does not have a dedicated ACL data packet
  * pool.
  */
-int
-ble_hci_trans_set_acl_free_cb(os_mempool_put_fn *cb, void *arg)
+int ble_hci_trans_set_acl_free_cb(os_mempool_put_fn *cb, void *arg)
 {
     return BLE_ERR_UNSUPPORTED;
 }
 
-int
-ble_hci_trans_reset(void)
+int ble_hci_trans_reset(void)
 {
     /* No work to do.  All allocated buffers are owned by the host or
      * controller, and they will get freed by their owners.
@@ -239,8 +216,7 @@ ble_hci_trans_reset(void)
  * @return                      The allocated buffer on success;
  *                              NULL on buffer exhaustion.
  */
-static struct os_mbuf *
-ble_hci_trans_acl_buf_alloc(void)
+static struct os_mbuf *ble_hci_trans_acl_buf_alloc(void)
 {
     struct os_mbuf *m;
     uint8_t usrhdr_len;
@@ -257,8 +233,7 @@ ble_hci_trans_acl_buf_alloc(void)
     return m;
 }
 
-void
-ble_hci_rx_acl(uint8_t *data, uint16_t len)
+static void ble_hci_rx_acl(uint8_t *data, uint16_t len)
 {
     struct os_mbuf *m;
     int sr;
@@ -276,17 +251,18 @@ ble_hci_rx_acl(uint8_t *data, uint16_t len)
         return;
     }
     OS_ENTER_CRITICAL(sr);
-    ble_hci_rx_acl_hs_cb(m, NULL);
+    if (ble_hci_rx_acl_hs_cb) {
+        ble_hci_rx_acl_hs_cb(m, NULL);
+    }
     OS_EXIT_CRITICAL(sr);
 }
 
-void ble_hci_transport_init(void)
+static void ble_hci_transport_init(void)
 {
     int rc;
 
     /* Ensure this function only gets called by sysinit. */
     SYSINIT_ASSERT_ACTIVE();
-
 
     rc = os_mempool_ext_init(&ble_hci_acl_pool,
                              MYNEWT_VAL(BLE_ACL_BUF_COUNT),
@@ -377,8 +353,6 @@ static int host_rcv_pkt(uint8_t *data, uint16_t len)
 
         assert(rc == 0);
     } else if (data[0] == BLE_HCI_UART_H4_ACL) {
-        extern void ble_hci_rx_acl(uint8_t *data, uint16_t len);
-
         ble_hci_rx_acl(data + 1, len - 1);
     }
     return 0;
@@ -405,12 +379,9 @@ esp_err_t esp_nimble_hci_and_controller_init(void)
 {
     esp_err_t ret;
 
-    esp_bt_controller_config_t bt_cfg = BT_CONTROLLER_INIT_CONFIG_DEFAULT();
+    esp_bt_controller_mem_release(ESP_BT_MODE_CLASSIC_BT);
 
-    ret = esp_bt_controller_mem_release(ESP_BT_MODE_CLASSIC_BT);
-    if (ret) {
-        return ret;
-    }
+    esp_bt_controller_config_t bt_cfg = BT_CONTROLLER_INIT_CONFIG_DEFAULT();
 
     if ((ret = esp_bt_controller_init(&bt_cfg)) != ESP_OK) {
         return ret;
@@ -419,6 +390,50 @@ esp_err_t esp_nimble_hci_and_controller_init(void)
     if ((ret = esp_bt_controller_enable(ESP_BT_MODE_BLE)) != ESP_OK) {
         return ret;
     }
-
     return esp_nimble_hci_init();
+}
+
+static esp_err_t ble_hci_transport_deinit(void)
+{
+    int ret = 0;
+
+    ret += os_mempool_clear(&ble_hci_evt_lo_pool);
+
+    ret += os_mempool_clear(&ble_hci_evt_hi_pool);
+
+    ret += os_mempool_clear(&ble_hci_cmd_pool);
+
+    ret += os_mempool_ext_clear(&ble_hci_acl_pool);
+
+    if (ret) {
+        return ESP_FAIL;
+    } else {
+        return ESP_OK;
+    }
+}
+
+esp_err_t esp_nimble_hci_deinit(void)
+{
+    return ble_hci_transport_deinit();
+}
+
+esp_err_t esp_nimble_hci_and_controller_deinit(void)
+{
+    int ret;
+    ret = esp_nimble_hci_deinit();
+    if (ret != ESP_OK) {
+        return ret;
+    }
+
+    ret = esp_bt_controller_disable();
+    if (ret != ESP_OK) {
+        return ret;
+    }
+
+    ret = esp_bt_controller_deinit();
+    if (ret != ESP_OK) {
+        return ret;
+    }
+
+    return ESP_OK;
 }
