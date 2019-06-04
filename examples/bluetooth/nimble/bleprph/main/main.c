@@ -322,7 +322,11 @@ bleprph_on_sync(void)
 void
 nimble_host_task(void *param)
 {
+
+    /* This function will return only when nimble_port_stop() is executed */
     nimble_port_run();
+
+    nimble_port_freertos_deinit();
 }
 
 void ble_host_task(void *param)
