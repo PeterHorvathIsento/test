@@ -62,14 +62,14 @@ config BT_NIMBLE_SVC_GAP_APPEARANCE
         Standard BLE GAP Appearance value in HEX format e.g. 0x02C0
 
 config BT_NIMBLE_SVC_GAP_DEVICE_NAME
-    string "BLE GAP Device Name"
+    string "BLE GAP device name"
     depends on BT_NIMBLE_ENABLED
     default "nimble"
     help
         The Device Name characteristic shall contain the name of the device as an UTF-8 string.
 
 config BT_NIMBLE_GAP_DEVICE_NAME_MAX_LEN
-    int "Maximum length of BLE Device Name in octets"
+    int "Maximum length of BLE device name in octets"
     depends on BT_NIMBLE_ENABLED
     default 31
     help
